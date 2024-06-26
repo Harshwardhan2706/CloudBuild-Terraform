@@ -1,1 +1,39 @@
+steps:
+  - id: 'branch name'
+    name: 'alpine'
+    entrypoint: 'sh'
+    args:
+    - '-c'
+    - |
+        echo "**************"
+        echo "$BRANCH_NAME"
+        echo "88888888888899"
 
+  - id: 'tf init'
+    name: 'hashicorp/terraform:1.0.0'
+    entrypoint: 'sh'
+    args:
+    - '-c'
+    - |
+        terraform init
+
+  - id: 'tf plan'
+    name: 'hashicorp/terraform:1.0.0'
+    entrypoint: 'sh'
+    args:
+    - '-c'
+    - |
+        terraform plan
+
+  - id: 'tf apply'
+    name: 'hashicorp/terraform:1.0.0'
+    entrypoint: 'sh'
+    args:
+    - '-c'
+    - |
+        if [[ "$BRANCH_NAME" == "main" ]]; then
+          echo "Branch is 'main', proceeding with terraform apply"
+          terraform apply
+        else
+          exit 0
+        fi
